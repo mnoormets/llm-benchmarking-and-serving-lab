@@ -24,3 +24,11 @@ Sources: [vLLM benchmarks](https://docs.vllm.ai/en/latest/benchmarking/), [Ollam
 `python -m serving.perplexity --model-path LOCAL_SAFETENSORS_MODEL --tokenizer-path SAME_LOCAL_TOKENIZER --corpus evaluation.jsonl --device cuda` evaluates a fixed joined text stream with overlapping likelihood windows. Each causal target is counted once; corpus and token hashes allow before/after input comparisons. Use the same window, stride, tokenizer and independent corpus. Model files must already be local: this command does not buy compute or download models. Loader compatibility with each AWQ/GPTQ backend still needs verification; it does not convert or prune models.
 
 Five CPU tests check scored token coverage and a known uniform-distribution perplexity of 10. These establish the evaluator contract, not an AWQ quality result or real model benchmark.
+
+## Free Colab GPU execution
+
+[Open the T4 notebook](https://colab.research.google.com/github/mnoormets/llm-benchmarking-and-serving-lab/blob/main/notebooks/colab_serving.ipynb). Use a **fresh free T4 runtime** so the QLoRA model is not still occupying VRAM. Run all; the code handles clone/install/server startup, model pull, warmup, two repeats at client concurrency 1/10/50/100, chart and ZIP download. Requires several GB of download and may take tens of minutes.
+
+Uses Mistral-7B-Instruct-v0.3 Q4_K_M with recorded Ollama digest, not the earlier Qwen QLoRA adapter. Server decode parallelism is fixed at 4; higher client concurrency measures queueing/saturation, not 100 simultaneously decoding GPU sequences. TTFT includes server queueing and ends at first nonempty content chunk. Aggregate TPS is successful generated tokens divided by full wall runtime; per-request engine TPS uses Ollama eval_count / eval_duration and is a different metric. Output cap 32, context 2048, fixed prompt set/seed, cold-start receipt separate, three warmups, raw failures retained. Prompt-cache reuse is possible and the experiment is explicitly warm. No comparative vLLM/TensorRT speedup is claimed.
+
+Prepared runner has no real GPU results until its exported receipts are inspected. Local tests use only a labelled protocol fixture. Sources: [Ollama Linux](https://docs.ollama.com/linux), [parallelism](https://docs.ollama.com/faq), [generate timing fields](https://docs.ollama.com/api/generate).

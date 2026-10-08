@@ -18,7 +18,7 @@ def server(protocol,usage=True,complete=True):
                 if complete:lines+=['data: [DONE]\n\n']
             else:
                 lines=[json.dumps({'response':'hello world','done':False})+'\n']
-                if complete:lines+=[json.dumps({'done':True,'eval_count':7,'prompt_eval_count':9})+'\n']
+                if complete:lines+=[json.dumps({'done':True,'eval_count':7,'prompt_eval_count':9,'eval_duration':2000000000})+'\n']
             for line in lines:self.wfile.write(line.encode());self.wfile.flush()
     http=ThreadingHTTPServer(('127.0.0.1',0),Handler);thread=threading.Thread(target=http.serve_forever,daemon=True);thread.start()
     try:yield 'http://127.0.0.1:'+str(http.server_port)
@@ -46,3 +46,20 @@ def test_no_external_or_paid_endpoint(url):
     with pytest.raises(ValueError):endpoint_ok(url)
 
 def test_tail_percentile():assert percentile([1,2,3,100],.95)==100
+
+
+def test_engine_tps_uses_nanoseconds_and_differs_from_wall_throughput():
+    with server('ollama') as url:
+        result=run(url,'ollama','fixture',['p'],options={'num_ctx':2048})
+    assert result['rows'][0]['engine_decode_tokens_per_second']==3.5
+    assert result['output_tokens_per_second']==7/result['elapsed_seconds']
+    assert result['end_to_end_p50_seconds']>=0
+
+def test_sweep_writes_real_protocol_receipts(tmp_path):
+    from serving.sweep import sweep
+    with server('ollama') as url:
+        report=sweep(url,'fixture',tmp_path,levels=(1,4),repeats=1,requests=4,max_tokens=8)
+    assert report['status']=='completed' and len(report['runs'])==2
+    assert all(r['successes']==4 and r['failures']==0 for r in report['runs'])
+    assert json.loads((tmp_path/'c4-r0.json').read_text())['concurrency']==4
+    assert report['prompt_sha256']

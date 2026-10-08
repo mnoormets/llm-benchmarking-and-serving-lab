@@ -1,6 +1,6 @@
 {
   "date": "2026-10-09",
-  "protocol_tests_passed": 8,
+  "protocol_tests_passed": 10,
   "actual_local_http_streams_tested": true,
   "tested": [
     "OpenAI SSE",
@@ -16,6 +16,8 @@
   "tensorrt_llm_benchmark": false,
   "awq_conversion_executed": false,
   "quality_evaluator_cpu_tests_passed": 5,
-  "total_tests_passed": 13,
-  "actual_model_perplexity_measured": false
+  "total_tests_passed": 15,
+  "actual_model_perplexity_measured": false,
+  "colab_ollama_runner_prepared": true,
+  "colab_ollama_runner_gpu_executed": false
 }
