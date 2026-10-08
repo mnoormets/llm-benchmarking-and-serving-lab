@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-09",
+  "protocol_tests_passed": 8,
+  "actual_local_http_streams_tested": true,
+  "tested": [
+    "OpenAI SSE",
+    "Ollama NDJSON",
+    "missing usage",
+    "incomplete stream",
+    "parallel requests",
+    "external endpoint rejection"
+  ],
+  "fixture_scope": "Synthetic protocol server, no model inference",
+  "real_vllm_benchmark": false,
+  "real_ollama_benchmark": false,
+  "tensorrt_llm_benchmark": false,
+  "awq_conversion_executed": false
+}

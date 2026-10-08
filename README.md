@@ -1,0 +1,20 @@
+# LLM Benchmarking and Serving Lab
+
+Local streaming load generator for OpenAI-compatible servers (including vLLM and compatible HF serving) and Ollama native generate. No external/paid endpoints or model auto-downloads. Does not pretend an HF `pipeline` object is a production HTTP server or implement TensorRT-LLM itself.
+
+```
+python -m serving.benchmark --url http://127.0.0.1:8000/v1/chat/completions --protocol openai --model YOUR_MODEL --label vllm-warm-c1 --requests 20 --concurrency 1
+python -m serving.benchmark --url http://127.0.0.1:11434/api/generate --protocol ollama --model YOUR_MODEL --label ollama-warm-c4 --requests 20 --concurrency 4
+```
+
+Sweep concurrency 1, 4, 16, then 100 only if earlier loads are safe. Separate cold-start from warmed runs and pre-run warmups. Use identical base model/revision, tokenizer, prompt set, output length, quantization/dtype, context limit, hardware and server version; record these alongside each run. Different backends/quantization are confounders, not engine-only speed comparisons. Report p50/p95 TTFT, successful requests/s, tokens/s and failures, not only fastest latency.
+
+TTFT is arrival of first nonempty generated content chunk (network-visible approximation to first token). One chunk may contain many tokens: output counts come from final server usage or Ollama eval_count. Missing usage yields unknown token throughput. Closed-loop worker queuing is included in wall throughput but not worker-start TTFT. This does not measure open-loop arrival SLOs or exact inter-token latency. Streaming finish marker is required, HTTP errors remain failures.
+
+PagedAttention manages KV-cache blocks; continuous batching schedules requests across decoding steps. A concurrency comparison alone cannot isolate the impact of PagedAttention. TensorRT-LLM is not simply converting all Python to C++; engine build/configuration and hardware support must be checked. Speculative decoding requires an appropriate draft model and quality-preserving verification, with acceptance rate and total speed measured.
+
+No real vLLM/Ollama/TensorRT-LLM GPU performance results yet. Tests use a labelled local protocol fixture, not LLM inference. Free Colab single-GPU availability is not a multi-GPU allocation.
+
+Quantization plan: fix an independent text corpus, baseline/config hashes and tokenizer; compare identical perplexity likelihood windows and extraction accuracy before/after AWQ/GPTQ. GGUF is a container format with quantization variants, not one calibration algorithm; pruning is distinct. AWQ/GPTQ conversion and lm-evaluation-harness execution are not claimed complete. Exact quality changes must be measured; do not promise a universal 0.5% loss.
+
+Sources: [vLLM benchmarks](https://docs.vllm.ai/en/latest/benchmarking/), [Ollama generate](https://docs.ollama.com/api/generate).
