@@ -18,3 +18,9 @@ No real vLLM/Ollama/TensorRT-LLM GPU performance results yet. Tests use a labell
 Quantization plan: fix an independent text corpus, baseline/config hashes and tokenizer; compare identical perplexity likelihood windows and extraction accuracy before/after AWQ/GPTQ. GGUF is a container format with quantization variants, not one calibration algorithm; pruning is distinct. AWQ/GPTQ conversion and lm-evaluation-harness execution are not claimed complete. Exact quality changes must be measured; do not promise a universal 0.5% loss.
 
 Sources: [vLLM benchmarks](https://docs.vllm.ai/en/latest/benchmarking/), [Ollama generate](https://docs.ollama.com/api/generate).
+
+## Quantization quality measurement
+
+`python -m serving.perplexity --model-path LOCAL_SAFETENSORS_MODEL --tokenizer-path SAME_LOCAL_TOKENIZER --corpus evaluation.jsonl --device cuda` evaluates a fixed joined text stream with overlapping likelihood windows. Each causal target is counted once; corpus and token hashes allow before/after input comparisons. Use the same window, stride, tokenizer and independent corpus. Model files must already be local: this command does not buy compute or download models. Loader compatibility with each AWQ/GPTQ backend still needs verification; it does not convert or prune models.
+
+Five CPU tests check scored token coverage and a known uniform-distribution perplexity of 10. These establish the evaluator contract, not an AWQ quality result or real model benchmark.

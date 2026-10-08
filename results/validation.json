@@ -14,5 +14,8 @@
   "real_vllm_benchmark": false,
   "real_ollama_benchmark": false,
   "tensorrt_llm_benchmark": false,
-  "awq_conversion_executed": false
+  "awq_conversion_executed": false,
+  "quality_evaluator_cpu_tests_passed": 5,
+  "total_tests_passed": 13,
+  "actual_model_perplexity_measured": false
 }
