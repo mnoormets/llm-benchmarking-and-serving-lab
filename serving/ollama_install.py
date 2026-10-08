@@ -1,7 +1,13 @@
 """Install the official Ollama Linux archive under a local runtime prefix."""
 import hashlib,json,platform,stat,tarfile,time,urllib.request
 from pathlib import Path,PurePosixPath
+from urllib.parse import urlsplit,urlunsplit
 URL="https://ollama.com/download/ollama-linux-amd64.tar.zst"
+
+def public_download_url(url):
+    """Remove temporary signed query tokens from public receipts."""
+    parts=urlsplit(url)
+    return urlunsplit((parts.scheme,parts.netloc,parts.path,"",""))
 
 def extract_package(archive,destination):
     import zstandard
@@ -41,7 +47,7 @@ def install(destination,log_directory):
             print("Downloading official Ollama package; this can take several minutes...",flush=True)
             req=urllib.request.Request(URL,headers={"User-Agent":"llm-serving-colab-lab/1.0"})
             with urllib.request.urlopen(req,timeout=120) as response,archive.open("wb") as out:
-                final_url=response.geturl()
+                final_url=public_download_url(response.geturl())
                 while True:
                     chunk=response.read(1024*1024)
                     if not chunk:break

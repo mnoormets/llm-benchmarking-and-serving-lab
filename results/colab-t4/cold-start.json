@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "engine_decode_tokens_per_second": 38.06582771168466,
+  "ttft_seconds": 90.34927629399999,
+  "end_to_end_seconds": 91.19027458899996,
+  "output_tokens": 32,
+  "input_tokens": 14,
+  "content_chunks": 32,
+  "stream_span_seconds": 0.839458551000007,
+  "ttft_definition": "first nonempty content chunk, not first byte; a chunk may contain multiple tokens"
+}

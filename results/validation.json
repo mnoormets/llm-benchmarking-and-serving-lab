@@ -12,15 +12,18 @@
   ],
   "fixture_scope": "Synthetic protocol server, no model inference",
   "real_vllm_benchmark": false,
-  "real_ollama_benchmark": false,
+  "real_ollama_benchmark": true,
   "tensorrt_llm_benchmark": false,
   "awq_conversion_executed": false,
   "quality_evaluator_cpu_tests_passed": 5,
-  "total_tests_passed": 20,
+  "total_tests_passed": 21,
   "actual_model_perplexity_measured": false,
   "colab_ollama_runner_prepared": true,
-  "colab_ollama_runner_gpu_executed": false,
-  "installer_archive_tests_passed": 5,
+  "colab_ollama_runner_gpu_executed": true,
+  "installer_archive_tests_passed": 6,
   "colab_local_prefix_installer_prepared": true,
-  "colab_local_prefix_installer_executed": false
+  "colab_local_prefix_installer_executed": true,
+  "verified_warm_requests": 800,
+  "verified_warm_failures": 0,
+  "real_gpu_evidence": "results/colab-t4/validation.json"
 }

@@ -26,3 +26,8 @@ def test_rejects_archive_path_escape(tmp_path,name):
 def test_missing_executable_rejected(tmp_path):
     archive=tmp_path/"bad.zst";package(archive,[("lib/ollama/library",b"fixture")])
     with pytest.raises(ValueError,match="executable"):extract_package(archive,tmp_path/"runtime")
+
+
+def test_receipt_drops_temporary_download_credentials():
+    from serving.ollama_install import public_download_url
+    assert public_download_url("https://example.org/package?sig=secret&jwt=temporary#token") == "https://example.org/package"

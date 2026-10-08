@@ -1,0 +1,10 @@
+{
+  "source_url": "https://ollama.com/download/ollama-linux-amd64.tar.zst",
+  "resolved_download_url": "https://release-assets.githubusercontent.com/github-production-release-asset/658928958/ec8f6044-71cb-42a9-a2a9-6bc20d68894e",
+  "archive_sha256": "a7aebbe3dd76ccf1351a56a3e57218ad4863cb5f9a9938c58de87a37555e355d",
+  "download_bytes": 1436371398,
+  "install_seconds": 21.731337200000098,
+  "method": "local official tar.zst archive, Python zstandard; no shell installer/system service",
+  "members": 65,
+  "uncompressed_member_bytes": 2252655658
+}
