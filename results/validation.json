@@ -16,8 +16,11 @@
   "tensorrt_llm_benchmark": false,
   "awq_conversion_executed": false,
   "quality_evaluator_cpu_tests_passed": 5,
-  "total_tests_passed": 15,
+  "total_tests_passed": 20,
   "actual_model_perplexity_measured": false,
   "colab_ollama_runner_prepared": true,
-  "colab_ollama_runner_gpu_executed": false
+  "colab_ollama_runner_gpu_executed": false,
+  "installer_archive_tests_passed": 5,
+  "colab_local_prefix_installer_prepared": true,
+  "colab_local_prefix_installer_executed": false
 }
